@@ -1,0 +1,95 @@
+# Hacker Break Configuration
+# TOML Configuration File
+
+# ============================================
+# GENERAL SETTINGS
+# ============================================
+
+[general]
+name = "Hacker Break"
+version = "1.0.0"
+log_level = "info"
+debug = false
+
+[general.database]
+path = "database/hbreak.db"
+
+# ============================================
+# NETWORK SETTINGS
+# ============================================
+
+[network]
+bind_address = "0.0.0.0"
+bind_port = 9876
+max_connections = 10000
+
+[network.timeouts]
+connection_timeout = 30
+read_timeout = 10
+write_timeout = 10
+
+# ============================================
+# FIREWALL SETTINGS
+# ============================================
+
+[firewall]
+enabled = true
+auto_block = true
+auto_block_threshold = 10
+max_blocked_ips = 10000
+
+[firewall.shield_mode]
+enabled_on_start = false
+log_blocked = true
+notify_on_block = true
+
+# ============================================
+# MONITORING SETTINGS
+# ============================================
+
+[monitoring]
+enabled = true
+interval_ms = 1000
+log_connections = true
+
+[monitoring.alerts]
+enabled = true
+sound = true
+vibration = true
+popup = true
+
+# ============================================
+# LOGGING SETTINGS
+# ============================================
+
+[logging]
+enabled = true
+path = "logs"
+max_size_mb = 100
+rotate = true
+
+[logging.modules]
+network = true
+firewall = true
+detector = true
+scanner = true
+
+# ============================================
+# CLI SETTINGS
+# ============================================
+
+[cli]
+theme = "cyberpunk"
+color = true
+animations = true
+autocomplete = true
+
+# ============================================
+# FUTURE (AI Integration)
+# ============================================
+
+[future.ai]
+enabled = false
+model = "local"
+endpoint = "http://localhost:11434"
+adaptive_protection = false

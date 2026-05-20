@@ -1,0 +1,678 @@
+/* Hacker Break - Cyberpunk Theme Styles */
+
+/* ============================================
+   CSS VARIABLES - CYBERPUNK COLOR PALETTE
+   ============================================ */
+
+:root {
+  /* Core Colors */
+  --bg-primary: #0a0a0a;
+  --bg-secondary: #111111;
+  --bg-tertiary: #1a1a1a;
+  --bg-card: #141414;
+  
+  /* Red Accent Colors */
+  --red-primary: #ff1744;
+  --red-dark: #b3102f;
+  --red-glow: rgba(255, 23, 68, 0.5);
+  --red-light: #ff5252;
+  
+  /* Text Colors */
+  --text-primary: #ffffff;
+  --text-secondary: #b3b3b3;
+  --text-muted: #666666;
+  
+  /* Status Colors */
+  --success: #00e676;
+  --warning: #ffea00;
+  --danger: #ff1744;
+  --info: #00b0ff;
+  
+  /* Glow Effects */
+  --glow-red: 0 0 10px var(--red-primary), 0 0 20px var(--red-glow);
+  --glow-text: 0 0 10px var(--red-primary);
+  
+  /* Fonts */
+  --font-mono: 'Fira Code', 'JetBrains Mono', 'Courier New', monospace;
+  --font-main: 'Inter', 'Segoe UI', sans-serif;
+  
+  /* Borders */
+  --border-color: #2a2a2a;
+  --border-red: var(--red-dark);
+}
+
+/* ============================================
+   BASE STYLES
+   ============================================ */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  height: 100%;
+  width: 100%;
+}
+
+body {
+  font-family: var(--font-main);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  overflow: hidden;
+}
+
+/* ============================================
+   GLITCH EFFECT ANIMATIONS
+   ============================================ */
+
+@keyframes glitch {
+  0% {
+    transform: translate(0);
+    text-shadow: 2px 0 var(--red-primary), -2px 0 var(--info);
+  }
+  20% {
+    transform: translate(-2px, 2px);
+    text-shadow: -2px 0 var(--red-primary), 2px 0 var(--info);
+  }
+  40% {
+    transform: translate(2px, -2px);
+    text-shadow: 2px 0 var(--red-primary), -2px 0 var(--info);
+  }
+  60% {
+    transform: translate(-2px, -2px);
+    text-shadow: -2px 0 var(--red-primary), 2px 0 var(--info);
+  }
+  80% {
+    transform: translate(2px, 2px);
+    text-shadow: 2px 0 var(--red-primary), -2px 0 var(--info);
+  }
+  100% {
+    transform: translate(0);
+    text-shadow: none;
+  }
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 5px var(--red-primary), 0 0 10px var(--red-glow);
+  }
+  50% {
+    box-shadow: 0 0 15px var(--red-primary), 0 0 30px var(--red-glow);
+  }
+}
+
+@keyframes scanline {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(100vh);
+  }
+}
+
+@keyframes blink {
+  0%, 50% {
+    opacity: 1;
+  }
+  51%, 100% {
+    opacity: 0;
+  }
+}
+
+@keyframes typing {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+@keyframes flicker {
+  0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
+    opacity: 1;
+  }
+  20%, 24%, 55% {
+    opacity: 0.4;
+  }
+}
+
+/* ============================================
+   UTILITY CLASSES
+   ============================================ */
+
+.glitch {
+  animation: glitch 0.3s cubic-bezier(.25, .46, .45, .94) both infinite;
+}
+
+.pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+.blink {
+  animation: blink 1s step-end infinite;
+}
+
+.flicker {
+  animation: flicker 3s infinite;
+}
+
+/* ============================================
+   APP LAYOUT
+   ============================================ */
+
+.app-container {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  background: 
+    radial-gradient(ellipse at bottom, #1a0008 0%, transparent 50%),
+    linear-gradient(to bottom,var(--bg-primary) 0%, #050505 100%);
+  position: relative;
+}
+
+.app-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(255, 23, 68, 0.03) 2px,
+    rgba(255, 23, 68, 0.03) 4px
+  );
+  pointer-events: none;
+  z-index: 1000;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 280px;
+  background: var(--bg-secondary);
+  border-right: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.sidebar::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 1px;
+  height: 100%;
+  background: linear-gradient(to bottom, var(--red-primary), transparent);
+}
+
+/* Main Content */
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* Header */
+.header {
+  height: 60px;
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  gap: 20px;
+}
+
+/* Dashboard */
+.dashboard {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+/* Cards */
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  padding: 20px;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, var(--red-primary), transparent);
+}
+
+.card:hover {
+  border-color: var(--red-dark);
+  box-shadow: var(--glow-red);
+}
+
+/* ============================================
+   TYPOGRAPHY
+   ============================================ */
+
+h1, h2, h3 {
+  font-family: var(--font-mono);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+h1 {
+  color: var(--red-primary);
+  text-shadow: var(--glow-text);
+  font-size: 24px;
+}
+
+h2 {
+  color: var(--text-primary);
+  font-size: 18px;
+}
+
+h3 {
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+p {
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* Terminal text */
+.terminal-text {
+  font-family: var(--font-mono);
+  color: var(--red-primary);
+}
+
+/* ============================================
+   BUTTONS
+   ============================================ */
+
+.btn {
+  font-family: var(--font-mono);
+  padding: 12px 24px;
+  border: 1px solid var(--red-dark);
+  background: transparent;
+  color: var(--red-primary);
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-size: 12px;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, var(--red-dark), transparent);
+  transition: left 0.5s ease;
+}
+
+.btn:hover::before {
+  left: 100%;
+}
+
+.btn:hover {
+  background: var(--red-dark);
+  color: var(--text-primary);
+  box-shadow: var(--glow-red);
+}
+
+.btn:active {
+  transform: scale(0.98);
+}
+
+.btn-danger {
+  border-color: var(--danger);
+  color: var(--danger);
+}
+
+.btn-danger:hover {
+  background: var(--danger);
+}
+
+.btn-success {
+  border-color: var(--success);
+  color: var(--success);
+}
+
+.btn-success:hover {
+  background: var(--success);
+}
+
+/* ============================================
+   INPUTS
+   ============================================ */
+
+.input {
+  font-family: var(--font-mono);
+  padding: 12px 16px;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  width: 100%;
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--red-primary);
+  box-shadow: 0 0 10px var(--red-glow);
+}
+
+.input::placeholder {
+  color: var(--text-muted);
+}
+
+/* ============================================
+   STATUS INDICATORS
+   ============================================ */
+
+.status-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 8px;
+}
+
+.status-active {
+  background: var(--success);
+  box-shadow: 0 0 10px var(--success);
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+.status-inactive {
+  background: var(--text-muted);
+}
+
+.status-warning {
+  background: var(--warning);
+  box-shadow: 0 0 10px var(--warning);
+}
+
+.status-danger {
+  background: var(--danger);
+  box-shadow: 0 0 10px var(--danger);
+  animation: blink 0.5s step-end infinite;
+}
+
+/* ============================================
+   STATS GRID
+   ============================================ */
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 15px;
+}
+
+.stat-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  padding: 20px;
+  text-align: center;
+}
+
+.stat-value {
+  font-family: var(--font-mono);
+  font-size: 32px;
+  color: var(--red-primary);
+  text-shadow: var(--glow-text);
+}
+
+.stat-label {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-top: 8px;
+}
+
+/* ============================================
+   TERMINAL
+   ============================================ */
+
+.terminal {
+  background: #0d0d0d;
+  border: 1px solid var(--border-color);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  padding: 15px;
+  height: 300px;
+  overflow-y: auto;
+}
+
+.terminal-line {
+  margin-bottom: 4px;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.terminal-prompt {
+  color: var(--red-primary);
+  flex-shrink: 0;
+}
+
+.terminal-output {
+  color: var(--text-secondary);
+}
+
+.terminal-error {
+  color: var(--danger);
+}
+
+.terminal-success {
+  color: var(--success);
+}
+
+/* ============================================
+   THREAT LIST
+   ============================================ */
+
+.threat-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.threat-item {
+  background: var(--bg-tertiary);
+  border-left: 3px solid var(--danger);
+  padding: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.threat-item.critical {
+  border-left-color: var(--danger);
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+.threat-item.high {
+  border-left-color: var(--warning);
+}
+
+.threat-item.medium {
+  border-left-color: var(--info);
+}
+
+/* ============================================
+   SCROLLBAR
+   ============================================ */
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-primary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--red-dark);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--red-primary);
+}
+
+/* ============================================
+   LOGO STYLES
+   ============================================ */
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 20px;
+}
+
+.logo-icon {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  color: var(--red-primary);
+  text-shadow: var(--glow-text);
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+.logo-text {
+  font-family: var(--font-mono);
+  font-size: 18px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+}
+
+.logo-subtitle {
+  font-size: 10px;
+  color: var(--text-muted);
+  letter-spacing: 4px;
+  text-transform: uppercase;
+}
+
+/* ============================================
+   NAVIGATION
+   ============================================ */
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 10px;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  color: var(--text-secondary);
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 1px solid transparent;
+}
+
+.nav-item:hover {
+  background: var(--bg-tertiary);
+  color: var(--red-primary);
+  border-color: var(--border-color);
+}
+
+.nav-item.active {
+  background: var(--bg-tertiary);
+  color: var(--red-primary);
+  border-color: var(--red-dark);
+}
+
+.nav-icon {
+  font-size: 16px;
+  width: 20px;
+  text-align: center;
+}
+
+/* ============================================
+   GRAPHICS / CHARTS PLACEHOLDER
+   ============================================ */
+
+.chart-container {
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  height: 200px;
+  display: flex;
+  align-items: flex-end;
+  padding: 20px;
+  gap: 4px;
+}
+
+.chart-bar {
+  flex: 1;
+  background: linear-gradient(to top, var(--red-dark), var(--red-primary));
+  transition: all 0.3s ease;
+}
+
+.chart-bar:hover {
+  background: var(--red-primary);
+  box-shadow: var(--glow-red);
+}
+
+/* ============================================
+   LOADING STATES
+   ============================================ */
+
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: var(--text-muted);
+}
+
+.loading-spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--border-color);
+  border-top-color: var(--red-primary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
