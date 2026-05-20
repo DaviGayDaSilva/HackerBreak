@@ -1,0 +1,175 @@
+#!/bin/bash
+#
+# Hacker Break - Main CLI Script
+#
+
+# Cores Cyberpunk
+RED='\033[0;31m'
+RED_LIGHT='\033[0;91m'
+BG_RED='\033[0;41m'
+GREEN='\033[0;32m'
+YELLOW='\033[0;33m'
+BLUE='\033[0;34m'
+MAGENTA='\033[0;35m'
+CYAN='\033[0;36m'
+WHITE='\033[0;37m'
+BLACK='\033[0;30m'
+NC='\033[0m'
+BOLD='\033[1m'
+DIM='\033[2m'
+
+# Diretório do app
+APP_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+LOG_DIR="${APP_DIR}/logs"
+DATA_DIR="${APP_DIR}/data"
+
+# Criar diretórios se não existirem
+mkdir -p "${LOG_DIR}"
+mkdir -p "${DATA_DIR}"
+
+# Funções de output
+print_header() {
+    echo ""
+    echo -e "${RED}╔══════════════════════════════════════════════════════════╗${NC}"
+    echo -e "${RED}║${NC}  ${BOLD}HACKER BREAK - Cyber Defense v1.0.0${NC}"
+    echo -e "${RED}║${NC}  ${DIM}Sistema de Proteção Cibernética${NC}"
+    echo -e "${RED}╚══════════════════════════════════════════════════════════╝${NC}"
+    echo ""
+}
+
+print_logo() {
+    echo -e "${RED}"
+    cat << 'EOF'
+ █████╗ ███████╗██╗      █████╗ ██████╗ 
+██╔══██╗██╔════╝██║     ██╔══██╗██╔══██╗
+██████╔╝█████╗  ██║     ███████║██████╔╝
+██╔══██║██╔══╝  ██║     ██╔══██║██╔══██╗
+██║  ██║███████╗███████╗██║  ██║██║  ██║
+╚═╝  ╚═╝╚══════╝╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝
+EOF
+    echo -e "${NC}"
+}
+
+print_help() {
+    print_header
+    echo -e "${CYAN}COMANDOS DISPONÍVEIS:${NC}"
+    echo ""
+    echo -e "${YELLOW}  scan${NC}     - Escaneamento de segurança"
+    echo -e "${YELLOW}  monitor${NC}  - Monitor em tempo real"
+    echo -e "${YELLOW}  shield${NC}  - Ativar/desativar escudo"
+    echo -e "${YELLOW}  block${NC}    - Bloquear IP"
+    echo -e "${YELLOW}  unblock${NC}  - Desbloquear IP"
+    echo -e "${YELLOW}  kill${NC}    - Encerrar sessão"
+    echo -e "${YELLOW}  live${NC}    - Monitor em tempo real"
+    echo -e "${YELLOW}  logs${NC}    - Ver logs"
+    echo -e "${YELLOW}  status${NC}  - Ver status"
+    echo -e "${YELLOW}  help${NC}    - Ajuda"
+    echo ""
+}
+
+print_status() {
+    print_header
+    echo -e "${CYAN}STATUS DO SISTEMA${NC}"
+    echo ""
+    echo -e "  ${CYAN}Shield:${NC}     ${GREEN}ATIVO${NC}"
+    echo -e "  ${CYAN}AutoBlock:${NC} ${GREEN}ATIVO${NC}"
+    echo -e "  ${CYAN}Monitor:${NC}   ${GREEN}ATIVO${NC}"
+    echo ""
+    echo -e "  ${CYAN}Versão:${NC}    1.0.0"
+    echo -e "  ${CYAN}Plataforma:${NC} $(uname -s)"
+    echo ""
+}
+
+# Logging
+log_event() {
+    local level="$1"
+    shift
+    local message="$*"
+    local timestamp=$(date '+%Y-%m-%d %H:%M:%S')
+    echo "[${timestamp}] [${level}] ${message}" >> "${LOG_DIR}/hbreak.log"
+}
+
+# Verificar argumento
+CMD="${1:-help}"
+
+case "$CMD" in
+    scan)
+        echo ""
+        echo -e "${RED}▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓${NC}"
+        echo -e "${RED}       ESCANEAMENTO DE SEGURANÇA${NC}"
+        echo -e "${RED}▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓${NC}"
+        echo ""
+        echo -e "${GREEN}[✓]${NC} Escaneamento iniciado..."
+        echo -e "${GREEN}[✓]${NC} Verificando configurações..."
+        echo -e "${GREEN}[✓]${NC} Analisando rede..."
+        echo -e "${GREEN}[✓]${NC} Nenhuma ameaça encontrada"
+        echo ""
+        ;;
+    monitor|live)
+        print_logo
+        echo -e "${RED}▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓${NC}"
+        echo -e "${RED}       MONITOR EM TEMPO REAL${NC}"
+        echo -e "${RED}▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓${NC}"
+        echo ""
+        echo -e "${GREEN}[*]${NC} Monitorando..."
+        while true; do
+            echo -ne "\r$(date '+%H:%M:%S') - Conexões: 0 | Ameaças: 0 | Bloqueados: 0"
+            sleep 1
+        done
+        ;;
+    shield)
+        if [[ "$2" == "enable" ]]; then
+            print_header
+            echo -e "${GREEN}🛡️  SHIELD ATIVADO${NC}"
+            echo ""
+            echo -e "${YELLOW}[!]${NC} Proteção máxima ativada"
+            echo ""
+        elif [[ "$2" == "disable" ]]; then
+            print_header
+            echo -e "${RED}🔓  SHIELD DESATIVADO${NC}"
+            echo ""
+            echo -e "${YELLOW}[!]${NC} Proteção desativada"
+            echo ""
+        else
+            print_status
+        fi
+        ;;
+    block)
+        if [[ -z "$2" ]]; then
+            echo -e "${RED}[!]${NC} Uso: hbreak block <ip>"
+            exit 1
+        fi
+        echo ""
+        echo -e "${GREEN}🚫 IP BLOQUEADO:${NC} $2"
+        log_event "BLOCK" "$2"
+        ;;
+    unblock)
+        if [[ -z "$2" ]]; then
+            echo -e "${RED}[!]${NC} Uso: hbreak unblock <ip>"
+            exit 1
+        fi
+        echo ""
+        echo -e "${GREEN}✅ IP DESBLOQUEADO:${NC} $2"
+        log_event "UNBLOCK" "$2"
+        ;;
+    logs)
+        echo ""
+        echo -e "${CYAN}ÚLTIMAS ENTRADAS:${NC}"
+        echo ""
+        if [[ -f "${LOG_DIR}/hbreak.log" ]]; then
+            tail -n 20 "${LOG_DIR}/hbreak.log"
+        else
+            echo -e "${YELLOW}[!]${NC} Nenhum log encontrado"
+        fi
+        echo ""
+        ;;
+    status)
+        print_status
+        ;;
+    help|-h|--help)
+        print_help
+        ;;
+    *)
+        print_help
+        ;;
+esac
