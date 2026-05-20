@@ -1,0 +1,121 @@
+name: Build & Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+jobs:
+  core:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Install Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: stable
+      
+      - name: Build Core
+        run: cd core && cargo build --release
+      
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: core-library
+          path: core/target/release/libhacker_break_core.rlib
+
+  cli:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Build CLI
+        run: |
+          chmod +x cli/bin/hbreak
+          mkdir -p dist
+          cp -r cli/bin dist/hbreak
+          cp -r cli/scripts dist/
+          cp configs/hbreak.toml dist/
+          tar czvf hbreak-cli-linux-x64.tar.gz dist/
+      
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: cli-linux
+          path: hbreak-cli-linux-x64.tar.gz
+
+  android:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+      
+      - name: Setup Android SDK
+        uses: android-actions/setup-android-sdk@v2
+      
+      - name: Build APK
+        run: |
+          cd android
+          ./gradlew assembleRelease
+      
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-apk
+          path: android/app/build/outputs/apk/release/*.apk
+
+  desktop-tauri:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Install Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: stable
+      
+      - name: Install Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y pkg-config libglib2.0-dev libsoup-3.0-dev libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev
+      
+      - name: Build Tauri
+        run: |
+          cd desktop
+          npm install
+          cd src-tauri
+          cargo build --release
+      
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: desktop-app
+          path: desktop/src-tauri/target/release/hacker-break
+
+  release:
+    needs: [core, cli, android, desktop-tauri]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Download Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+      
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: artifacts/*/*
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
